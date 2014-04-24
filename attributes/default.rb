@@ -45,7 +45,6 @@ default['tomcat']['loglevel'] = 'INFO'
 default['tomcat']['tomcat_auth'] = 'true'
 
 case node['platform']
-
 when 'centos', 'redhat', 'fedora', 'amazon', 'scientific', 'oracle'
   default['tomcat']['user'] = 'tomcat'
   default['tomcat']['group'] = 'tomcat'
@@ -57,7 +56,16 @@ when 'centos', 'redhat', 'fedora', 'amazon', 'scientific', 'oracle'
   default['tomcat']['work_dir'] = "/var/cache/tomcat#{node["tomcat"]["base_version"]}/work"
   default['tomcat']['context_dir'] = "#{node["tomcat"]["config_dir"]}/Catalina/localhost"
   default['tomcat']['webapp_dir'] = "/var/lib/tomcat#{node["tomcat"]["base_version"]}/webapps"
-  default['tomcat']['keytool'] = 'keytool'
+
+  default['tomcat']['keytool'] = value_for_platform(
+    %w(amazon) => "keytool6",
+    %w(redhat, centos) => {
+        '6' => "keytool6",
+        'default' => "keytool"
+    },
+    'default' => 'keytool'
+  )
+
   default['tomcat']['lib_dir'] = "#{node["tomcat"]["home"]}/lib"
   default['tomcat']['endorsed_dir'] = "#{node["tomcat"]["lib_dir"]}/endorsed"
 when 'debian', 'ubuntu'
