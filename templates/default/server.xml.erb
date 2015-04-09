@@ -166,6 +166,13 @@
         <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
                prefix="localhost_access_log." suffix=".txt" pattern="common" resolveHosts="false"/>
         -->
+        <Valve 
+	   className="org.apache.catalina.valves.RemoteIpValve"
+	   internalProxies=".*"
+	   remoteIpHeader="x-forwarded-for"
+	   remoteIpProxiesHeader="x-forwarded-by"
+	   protocolHeader="x-forwarded-proto"
+	/>
 
       </Host>
     </Engine>
